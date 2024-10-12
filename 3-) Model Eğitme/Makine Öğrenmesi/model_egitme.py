@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.model_selection import train_test_split, cross_val_score, KFold
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.metrics import r2_score
 from sklearn.ensemble import (
     GradientBoostingRegressor, RandomForestRegressor, AdaBoostRegressor, ExtraTreesRegressor
@@ -19,35 +18,17 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.tree import DecisionTreeRegressor
 
-data = pd.read_csv('../2-) Veri Önişleme/Dacia_1-5_dCi_Stepway_Sandero_Hatchback5_guncel.csv')
+data = pd.read_csv('../../2-) Veri Önişleme/Dacia_1-5_dCi_Stepway_Sandero_Hatchback5_v3.csv')
 
-X = data.drop(['Fiyat'], axis=1)
-y = data['Fiyat']
+X = data.drop(['fiyat'], axis=1)
+y = data['fiyat']
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y, test_size=0.3, random_state=42
 )
 
 print(f"\nEğitim Seti Boyutu: {X_train.shape}")
 print(f"Test Seti Boyutu: {X_test.shape}")
-
-categorical_features = ['İlan Tarihi', 'Vites Tipi', 'Renk', 'Kimden', 'Ağır Hasarlı']
-numerical_features = ['Kilometre/Yaş', 'Ort. Yakıt Tüketimi', 'Değişen', 'Boyalı']
-
-encoder = OneHotEncoder(drop='first', sparse_output=False)
-X_train_cat = encoder.fit_transform(X_train[categorical_features])
-X_test_cat = encoder.transform(X_test[categorical_features])
-
-scaler = StandardScaler()
-X_train_num = scaler.fit_transform(X_train[numerical_features])
-X_test_num = scaler.transform(X_test[numerical_features])
-
-X_train_processed = np.hstack([X_train_num, X_train_cat])
-X_test_processed = np.hstack([X_test_num, X_test_cat])
-
-joblib.dump(encoder, 'encoder.pkl')
-joblib.dump(scaler, 'scaler.pkl')
-print("\nEncoder ve Scaler başarıyla kaydedildi.")
 
 models = {
     'Linear Regression': LinearRegression(),
@@ -86,7 +67,7 @@ kf = KFold(n_splits=5, shuffle=True, random_state=42)
 for name, model in models.items():
     try:
         cv_scores = cross_val_score(
-            model, X_train_processed, y_train, cv=kf, scoring='r2', n_jobs=-1
+            model, X_train, y_train, cv=kf, scoring='r2', n_jobs=-1
         )
         mean_score = cv_scores.mean()
         std_score = cv_scores.std()
@@ -104,11 +85,12 @@ if best_model_name is None:
     raise Exception("Hiçbir model başarıyla eğitilemedi. Lütfen veri setinizi ve model seçimlerinizi gözden geçirin.")
 print(f"\nEn İyi Model: {best_model_name} with Cross-Validation R²: {best_score:.4f}")
 
-best_model.fit(X_train_processed, y_train)
-y_pred = best_model.predict(X_test_processed)
+best_model.fit(X_train, y_train)
+y_pred = best_model.predict(X_test)
 r2 = r2_score(y_test, y_pred)
 print(f"\n{best_model_name} Test Seti R²: {r2:.4f}")
 
 model_filename = 'best_model.pkl'
 joblib.dump(best_model, model_filename)
+
 print(f"\nEn iyi model başarıyla kaydedildi: {model_filename}")

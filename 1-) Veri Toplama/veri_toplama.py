@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 import pandas as pd
 import time
+import re
 
 load_dotenv()
 
@@ -14,6 +15,15 @@ base_url = os.getenv("BASE_URL")
 url_path = os.getenv("URL_PATH")
 list_url = f"{base_url}{url_path}"
 ilanlar = []
+
+if os.path.exists("arabam_ilanlar.csv"):
+    df_existing = pd.read_csv("arabam_ilanlar.csv", dtype={'İlan No': str})
+    existing_ilan_nos = set(df_existing['İlan No'])
+    print(f"Mevcut {len(existing_ilan_nos)} ilan yüklendi.")
+else:
+    df_existing = pd.DataFrame()
+    existing_ilan_nos = set()
+    print("Mevcut ilan bulunamadı, yeni bir dosya oluşturulacak.")
 
 for page in range(1, 7):
     print(f"{page}. sayfa işleniyor...")
@@ -65,17 +75,35 @@ def ilan_detaylarini_getir(url):
         print(f"Fiyat kapsayıcı bulunamadı: {url}")
         detaylar["Fiyat"] = "Bilinmiyor"
     detaylar["URL"] = url
+    ilan_no_match = re.search(r'/(\d+)$', url)
+    if ilan_no_match:
+        detaylar['İlan No'] = ilan_no_match.group(1)
+    else:
+        detaylar['İlan No'] = None
     return detaylar
 
 
-detayli_ilanlar = []
+yeni_ilanlar = []
 for idx, ilan_url in enumerate(ilanlar, 1):
     print(f"{idx}. İlan işleniyor: {ilan_url}")
     detaylar = ilan_detaylarini_getir(ilan_url)
     if detaylar:
-        detayli_ilanlar.append(detaylar)
+        ilan_no = detaylar.get('İlan No')
+        if ilan_no and ilan_no not in existing_ilan_nos:
+            yeni_ilanlar.append(detaylar)
+            existing_ilan_nos.add(ilan_no)
+            print(f"Yeni ilan eklendi: İlan No {ilan_no}")
+        else:
+            print(f"İlan zaten mevcut: İlan No {ilan_no}")
     time.sleep(2)
 
-df = pd.DataFrame(detayli_ilanlar)
-df.to_csv("arabam_ilanlar.csv", index=False, encoding='utf-8-sig')
-print("Veriler başarıyla 'arabam_ilanlar.csv' dosyasına kaydedildi.")
+if yeni_ilanlar:
+    df_new = pd.DataFrame(yeni_ilanlar)
+    if not df_existing.empty:
+        df = pd.concat([df_existing, df_new], ignore_index=True)
+    else:
+        df = df_new
+    df.to_csv("arabam_ilanlar.csv", index=False, encoding='utf-8-sig')
+    print(f"Toplam {len(yeni_ilanlar)} yeni ilan eklendi. Veriler güncellendi.")
+else:
+    print("Yeni ilan bulunamadı. Veriler güncel.")
