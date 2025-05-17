@@ -6,11 +6,6 @@ A machine learning-based price prediction system for Dacia Sandero 1.5 dCi Stepw
 ## Purpose
 To develop a system that combines web scraping and machine learning techniques for objective vehicle price prediction in the Turkish automotive market. The project aims to provide users with realistic price forecasts while serving as a comprehensive example in the data science field.
 
-### Key Objectives:
-- Create an automated data collection and updatable data pipeline
-- Intelligently fill missing data and clean the dataset
-- Perform comprehensive comparison to select the optimal regression model
-
 ## Scope
 
 ### Technology Stack:
@@ -20,13 +15,6 @@ To develop a system that combines web scraping and machine learning techniques f
 - **Machine Learning**: scikit-learn
 - **Data Storage**: CSV
 - **Model Serialization**: joblib
-
-### Project Features:
-- Automated data collection via web scraping
-- Missing value imputation using 12 different algorithms
-- Comparative analysis of 23 regression algorithms
-- Ridge Regression achieving 79.68% test accuracy
-- Interactive price prediction interface
 
 ## Implementation
 
@@ -61,85 +49,79 @@ ArabamDacia/
 └── readme.md
 ```
 
-### Usage:
-```bash
-# Run the interactive prediction tool
-cd "04_model_test"
-python model_test.py
-```
-
 ### Data Pipeline:
-1. **Data Collection**: Automated scraping from Arabam.com
-2. **Data Preprocessing**: Cleaning, encoding, feature engineering
-3. **Missing Value Handling**: Intelligent imputation using 12 algorithms
-4. **Model Selection**: Testing 23 regression algorithms
-5. **Model Deployment**: Interactive prediction interface
+1. **Data Collection**: Automatic scraping from Arabam.com
+2. **Data Preprocessing**: Cleaning, coding, feature engineering
+3. **Lost Value Processing**: Imputation
+4. **Model Selection**: Testing regression algorithms
+5. **Model Deployment**: Interactive forecasting interface
 
 ### Model Performance:
-- **Cross-Validation R²**: 0.8237
-- **Test Set R²**: 0.7968
+- **Cross-Validation R²**: 0.7479
+- **Test Set R²**: 0.7268
 - **Best Model**: Ridge Regression
-- **Dataset Size**: 338 samples with 9 features
+- **Dataset Size**: 317 samples with 9 features
 
 ## Screenshots
 
-Results from model comparison showing Ridge Regression as the best performer with 82.37% CV accuracy:
+Results from model comparison showing Ridge Regression as the best performer with 74.79% CV accuracy:
 
 ```
-Training Set Size: (236, 9)
-Test Set Size: (102, 9)
+Training Set Size: (317, 9)
+Test Set Size: (137, 9)
 
-Linear Regression - Cross-Validation R²: 0.8237 (+/- 0.0303)
+Linear Regression - Cross-Validation R²: 0.7478 (+/- 0.0216)
 
-Ridge Regression - Cross-Validation R²: 0.8237 (+/- 0.0303)
+Ridge Regression - Cross-Validation R²: 0.7479 (+/- 0.0218)
 
-Lasso Regression - Cross-Validation R²: 0.8237 (+/- 0.0303)
+Lasso Regression - Cross-Validation R²: 0.7478 (+/- 0.0216)
 
-Elastic Net - Cross-Validation R²: 0.8023 (+/- 0.0337)
+Elastic Net - Cross-Validation R²: 0.7367 (+/- 0.0205)
 
-Bayesian Ridge - Cross-Validation R²: 0.6178 (+/- 0.1003)
+Bayesian Ridge - Cross-Validation R²: 0.5530 (+/- 0.0858)
 
-ARD Regression - Cross-Validation R²: 0.8109 (+/- 0.0364)
+ARD Regression - Cross-Validation R²: 0.7309 (+/- 0.0271)
 
-Stochastic Gradient Descent - Cross-Validation R²: -16747615789034279199064457216.0000 (+/- 15406528372484856481497219072.0000)
+Stochastic Gradient Descent - Cross-Validation R²: -32652623867839618089790472192.0000 (+/- 32554726349615014114068791296.0000)
 
-Theil-Sen Regressor - Cross-Validation R²: 0.5143 (+/- 0.0611)
+Theil-Sen Regressor - Cross-Validation R²: 0.3781 (+/- 0.1579)
 
-Huber Regressor - Cross-Validation R²: -4.8779 (+/- 6.5635)
+Huber Regressor - Cross-Validation R²: -5.2139 (+/- 7.3843)
 
-Passive Aggressive Regressor - Cross-Validation R²: -20.8927 (+/- 10.6177)
+Passive Aggressive Regressor - Cross-Validation R²: -53.5695 (+/- 45.2325)
 
-RANSAC Regressor - Cross-Validation R²: 0.7955 (+/- 0.0335)
+RANSAC Regressor - Cross-Validation R²: 0.7273 (+/- 0.0132)
 
-Orthogonal Matching Pursuit - Cross-Validation R²: 0.4550 (+/- 0.0607)
+Orthogonal Matching Pursuit - Cross-Validation R²: 0.3661 (+/- 0.1175)
 
-Support Vector Regressor (RBF Kernel) - Cross-Validation R²: -0.0289 (+/- 0.0287)
+Support Vector Regressor (RBF Kernel) - Cross-Validation R²: -0.0299 (+/- 0.0400)
 
-Nu Support Vector Regressor - Cross-Validation R²: -0.0264 (+/- 0.0197)
+Nu Support Vector Regressor - Cross-Validation R²: -0.0322 (+/- 0.0181)
 
-Random Forest Regressor - Cross-Validation R²: 0.7785 (+/- 0.0262)
+Random Forest Regressor - Cross-Validation R²: 0.6764 (+/- 0.0383)
 
-Gradient Boosting Regressor - Cross-Validation R²: 0.7892 (+/- 0.0311)
+Gradient Boosting Regressor - Cross-Validation R²: 0.6945 (+/- 0.0359)
 
-AdaBoost Regressor - Cross-Validation R²: 0.7580 (+/- 0.0395)
+AdaBoost Regressor - Cross-Validation R²: 0.6513 (+/- 0.0574)
 
-Extra Trees Regressor - Cross-Validation R²: 0.7763 (+/- 0.0257)
+Extra Trees Regressor - Cross-Validation R²: 0.6445 (+/- 0.0529)
 
-K-Nearest Neighbors Regressor - Cross-Validation R²: 0.5667 (+/- 0.1127)
+K-Nearest Neighbors Regressor - Cross-Validation R²: 0.4773 (+/- 0.0508)
 
-Decision Tree Regressor - Cross-Validation R²: 0.5963 (+/- 0.0533)
+Decision Tree Regressor - Cross-Validation R²: 0.4167 (+/- 0.0749)
 
-Kernel Ridge Regressor - Cross-Validation R²: 0.5721 (+/- 0.0432)
+Kernel Ridge Regressor - Cross-Validation R²: 0.5064 (+/- 0.1119)
 
-Gaussian Process Regressor - Cross-Validation R²: -30.9341 (+/- 3.0360)
+Gaussian Process Regressor - Cross-Validation R²: -32.4451 (+/- 7.2195)
 
-Multi-layer Perceptron Regressor - Cross-Validation R²: -9.4722 (+/- 2.8524)
+Multi-layer Perceptron Regressor - Cross-Validation R²: -10.4689 (+/- 2.4140)
 
-Best Model: Ridge Regression with Cross-Validation R²: 0.8237
+Best Model: Ridge Regression with Cross-Validation R²: 0.7479
 
-Ridge Regression Test Set R²: 0.7968
+Ridge Regression Test Set R²: 0.7268
 
 Best model successfully saved: best_model.pkl
+
+Process finished with exit code 0
+
 ```
-
-
